@@ -1,0 +1,2141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>The Words We Don't Have</title>
+
+
+<style>
+
+/* =========================
+   The Words We Don't Have
+   Seewo Board Edition
+   16:9 Presentation
+========================= */
+
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+
+body{
+
+    width:100vw;
+    height:100vh;
+
+    overflow:hidden;
+
+    font-family:
+    "Microsoft YaHei",
+    "PingFang SC",
+    Arial,
+    sans-serif;
+
+    background:#faf8f2;
+
+    color:#1c1c1c;
+
+}
+
+
+
+/* 页面容器 */
+
+.slide{
+
+    position:absolute;
+
+    width:100vw;
+
+    height:100vh;
+
+
+    display:flex;
+
+    align-items:center;
+
+
+    padding-left:8vw;
+
+
+    opacity:0;
+
+
+    transform:
+
+    translateX(80px);
+
+
+    transition:
+
+    opacity 1.3s ease,
+
+    transform 1.3s cubic-bezier(.22,1,.36,1);
+
+
+    pointer-events:none;
+
+
+}
+
+
+
+/* 当前页 */
+
+.slide.active{
+
+    opacity:1;
+
+    transform:translateX(0);
+
+    pointer-events:auto;
+
+}
+
+
+
+/* 离场 */
+
+.slide.leave{
+
+    opacity:0;
+
+    transform:translateX(-80px);
+
+}
+
+
+
+/* =========================
+   背景
+========================= */
+
+
+.bg-warm{
+
+background:
+
+linear-gradient(
+135deg,
+#fffaf0,
+#edf5ff
+);
+
+}
+
+
+
+.bg-paper{
+
+background:
+
+linear-gradient(
+135deg,
+#ffffff,
+#f6f3eb
+);
+
+}
+
+
+
+.bg-blue{
+
+background:
+
+linear-gradient(
+135deg,
+#edf6ff,
+#ffffff
+);
+
+}
+
+
+
+
+
+/* =========================
+   内容区域
+========================= */
+
+
+.content{
+
+width:55%;
+
+z-index:5;
+
+}
+
+
+
+
+.small-title{
+
+font-size:22px;
+
+letter-spacing:6px;
+
+color:#777;
+
+margin-bottom:30px;
+
+}
+
+
+
+
+h1{
+
+font-size:82px;
+
+line-height:1.12;
+
+font-weight:800;
+
+letter-spacing:-2px;
+
+}
+
+
+
+h2{
+
+font-size:58px;
+
+line-height:1.25;
+
+font-weight:750;
+
+margin-bottom:35px;
+
+}
+
+
+
+
+.text{
+
+font-size:32px;
+
+line-height:1.8;
+
+color:#333;
+
+}
+
+
+
+
+.key{
+
+font-size:42px;
+
+line-height:1.5;
+
+font-weight:700;
+
+color:#3568d4;
+
+}
+
+
+
+
+.quote{
+
+font-size:45px;
+
+line-height:1.5;
+
+font-weight:650;
+
+}
+
+
+
+
+/* =========================
+   图片区域
+========================= */
+
+
+.visual{
+
+position:absolute;
+
+right:7vw;
+
+width:34vw;
+
+height:34vw;
+
+border-radius:40px;
+
+overflow:hidden;
+
+
+box-shadow:
+
+0 25px 80px rgba(0,0,0,.16);
+
+
+}
+
+
+.visual img{
+
+width:100%;
+
+height:100%;
+
+object-fit:cover;
+
+}
+
+
+
+
+.visual::after{
+
+content:"";
+
+position:absolute;
+
+inset:0;
+
+
+background:
+
+linear-gradient(
+90deg,
+rgba(255,255,255,0.05),
+rgba(255,255,255,0.15)
+);
+
+
+}
+
+
+
+/* =========================
+   动画
+========================= */
+
+
+.active .content > *{
+
+
+animation:
+
+textIn 1s ease forwards;
+
+opacity:0;
+
+
+}
+
+
+
+.active .content h1,
+.active .content h2{
+
+animation-delay:.15s;
+
+}
+
+
+
+.active .content p{
+
+animation-delay:.45s;
+
+}
+
+
+
+@keyframes textIn{
+
+
+from{
+
+opacity:0;
+
+transform:
+
+translateY(35px);
+
+
+}
+
+
+to{
+
+opacity:1;
+
+transform:
+
+translateY(0);
+
+
+}
+
+
+}
+
+
+
+
+.active .visual{
+
+
+animation:
+
+imageIn 1.5s ease forwards;
+
+
+}
+
+
+
+@keyframes imageIn{
+
+
+from{
+
+opacity:0;
+
+transform:
+
+scale(.9);
+
+}
+
+
+to{
+
+opacity:1;
+
+transform:
+
+scale(1);
+
+}
+
+
+}
+
+
+
+
+/* 页码 */
+
+
+.page{
+
+position:absolute;
+
+bottom:45px;
+
+left:70px;
+
+font-size:20px;
+
+color:#888;
+
+}
+
+
+
+/* 作者 */
+
+
+.author{
+
+position:absolute;
+
+right:70px;
+
+bottom:45px;
+
+font-size:20px;
+
+color:#777;
+
+}
+
+
+
+
+/* =========================
+   演讲正文：按语速逐句滚动
+========================= */
+
+.speech-window{
+    position:relative;
+    width:100%;
+    height:clamp(150px, 22vh, 245px);
+    margin-top:8px;
+    overflow:hidden;
+    mask-image:linear-gradient(
+        to bottom,
+        transparent 0%,
+        #000 13%,
+        #000 87%,
+        transparent 100%
+    );
+    -webkit-mask-image:linear-gradient(
+        to bottom,
+        transparent 0%,
+        #000 13%,
+        #000 87%,
+        transparent 100%
+    );
+}
+
+.speech-track{
+    position:absolute;
+    left:0;
+    top:50%;
+    width:100%;
+    transform:translateY(-50%);
+    transition:transform .75s cubic-bezier(.22,1,.36,1);
+    will-change:transform;
+}
+
+.speech-line{
+    display:block;
+    width:100%;
+    min-height:1.35em;
+    padding:7px 0;
+    opacity:.20;
+    transform:scale(.94);
+    transform-origin:left center;
+    transition:
+        opacity .55s ease,
+        transform .55s ease,
+        filter .55s ease;
+    filter:blur(.15px);
+}
+
+.speech-line.active-line{
+    opacity:1;
+    transform:scale(1);
+    filter:none;
+}
+
+.speech-line.past-line{
+    opacity:.28;
+    transform:scale(.92);
+}
+
+.speech-line.future-line{
+    opacity:.20;
+    transform:scale(.94);
+}
+
+.speech-cursor{
+    position:absolute;
+    left:0;
+    bottom:2px;
+    width:42px;
+    height:3px;
+    border-radius:3px;
+    background:#3568d4;
+    opacity:0;
+    transform:scaleX(0);
+    transform-origin:left;
+}
+
+.active .speech-cursor{
+    animation:cursorIn .7s .35s ease forwards;
+}
+
+@keyframes cursorIn{
+    to{
+        opacity:.8;
+        transform:scaleX(1);
+    }
+}
+
+/* 滚动正文中的原有字号继续保留 */
+.speech-line.text{
+    font-size:32px;
+    line-height:1.55;
+    color:#333;
+}
+
+.speech-line.key{
+    font-size:42px;
+    line-height:1.35;
+    font-weight:700;
+    color:#3568d4;
+}
+
+.speech-line.quote{
+    font-size:45px;
+    line-height:1.4;
+    font-weight:650;
+}
+
+@media (max-width:1100px){
+    .speech-line.text{font-size:27px;}
+    .speech-line.key{font-size:35px;}
+    .speech-line.quote{font-size:38px;}
+}
+
+
+/* =========================================================
+   STABLE SCENE TRANSITIONS
+   The slides themselves NEVER animate during a page turn.
+   A separate opaque cover performs the entire visual transition.
+   This prevents partial DOM rendering / double-loading flashes.
+   ========================================================= */
+.slide{
+    opacity:1;
+    transform:none;
+    transition:none!important;
+    animation:none!important;
+    will-change:auto;
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
+}
+.slide:not(.active){opacity:0;pointer-events:none;}
+.active .content > *,
+.active .visual{
+    animation:none!important;
+    opacity:1!important;
+    transform:none!important;
+    filter:none!important;
+}
+.scene-transition{
+    position:fixed;inset:0;z-index:9999;pointer-events:none;overflow:hidden;
+    visibility:hidden;
+}
+.scene-transition.is-running{visibility:visible;}
+.scene-transition .cover{
+    position:absolute;inset:0;will-change:transform,opacity,clip-path;
+    background:#faf8f2;
+}
+/* 13 deliberately different bridge motions */
+.scene-transition.t-memory .cover{
+    background:linear-gradient(110deg,#f4efe5,#fff 48%,#eaf1ff);
+    animation:stCoverRight .82s cubic-bezier(.76,0,.24,1) both;
+}
+.scene-transition.t-rebuild .cover{
+    background:repeating-linear-gradient(0deg,#faf8f2 0 9vh,#3568d4 9vh 9.15vh);
+    animation:stWipeLeft .78s cubic-bezier(.76,0,.24,1) both;
+}
+.scene-transition.t-zoom .cover{
+    background:#edf6ff;clip-path:circle(0% at 72% 50%);
+    animation:stAperture .92s cubic-bezier(.76,0,.24,1) both;
+}
+.scene-transition.t-card .cover{
+    background:#f7f3ea;clip-path:inset(0 0 0 100%);
+    animation:stPageSweep .84s cubic-bezier(.76,0,.24,1) both;
+}
+.scene-transition.t-ripple .cover{
+    background:#edf6ff;clip-path:circle(0% at 50% 50%);
+    animation:stRipple .9s cubic-bezier(.76,0,.24,1) both;
+}
+.scene-transition.t-impact .cover{
+    background:#fff;animation:stImpact .52s cubic-bezier(.76,0,.24,1) both;
+}
+.scene-transition.t-book .cover{
+    background:linear-gradient(90deg,#f6f3eb 0 50%,#fff 50%);
+    clip-path:inset(0 50%);animation:stBook .9s cubic-bezier(.76,0,.24,1) both;
+}
+.scene-transition.t-split .cover{
+    background:linear-gradient(90deg,#edf6ff 0 50%,#fff 50%);
+    clip-path:polygon(0 0,50% 0,50% 100%,0 100%);
+    animation:stSplit .86s cubic-bezier(.76,0,.24,1) both;
+}
+.scene-transition.t-fusion .cover{
+    background:linear-gradient(135deg,#fffaf0 0 49%,#3568d4 49% 51%,#edf6ff 51%);
+    animation:stDiagonal .94s cubic-bezier(.76,0,.24,1) both;
+}
+.scene-transition.t-page .cover{
+    background:#faf8f2;transform-origin:left center;
+    animation:stPeel .9s cubic-bezier(.76,0,.24,1) both;
+}
+.scene-transition.t-digital .cover{
+    background:repeating-linear-gradient(0deg,rgba(237,246,255,.98) 0 6px,rgba(53,104,212,.08) 6px 8px);
+    animation:stScan .86s cubic-bezier(.76,0,.24,1) both;
+}
+.scene-transition.t-focus .cover{
+    background:#fffaf0;clip-path:circle(150% at 50% 50%);
+    animation:stFocus .96s cubic-bezier(.76,0,.24,1) both;
+}
+.scene-transition.t-infinite .cover{
+    background:linear-gradient(180deg,#edf6ff,#fff 52%,#fffaf0);
+    clip-path:inset(100% 0 0 0);
+    animation:stHorizon .98s cubic-bezier(.76,0,.24,1) both;
+}
+.scene-transition.t-loop .cover{
+    background:#fffaf0;clip-path:circle(0% at 50% 50%);
+    animation:stLoop .95s cubic-bezier(.76,0,.24,1) both;
+}
+.scene-transition.reverse .cover{animation-direction:reverse;}
+@keyframes stCoverRight{0%{transform:translate3d(-100%,0,0)}48%{transform:translate3d(0,0,0)}100%{transform:translate3d(100%,0,0)}}
+@keyframes stWipeLeft{0%{transform:translate3d(100%,0,0)}48%{transform:translate3d(0,0,0)}100%{transform:translate3d(-100%,0,0)}}
+@keyframes stAperture{0%{clip-path:circle(0% at 72% 50%)}44%{clip-path:circle(150% at 72% 50%)}100%{clip-path:circle(0% at 28% 50%)}}
+@keyframes stPageSweep{0%{clip-path:inset(0 0 0 100%)}46%{clip-path:inset(0)}100%{clip-path:inset(0 100% 0 0)}}
+@keyframes stRipple{0%{clip-path:circle(0% at 50% 50%)}46%{clip-path:circle(150% at 50% 50%)}100%{clip-path:circle(0% at 50% 50%)}}
+@keyframes stImpact{0%{opacity:0;transform:scale(1.08)}20%{opacity:1;transform:scale(1)}58%{opacity:1}100%{opacity:0}}
+@keyframes stBook{0%{clip-path:inset(0 50%)}46%{clip-path:inset(0)}100%{clip-path:inset(0 50%)}}
+@keyframes stSplit{0%{clip-path:polygon(0 0,50% 0,50% 100%,0 100%)}45%{clip-path:polygon(0 0,100% 0,100% 100%,0 100%)}100%{clip-path:polygon(50% 0,100% 0,100% 100%,50% 100%)}}
+@keyframes stDiagonal{0%{transform:translate3d(-110%,0,0)}47%{transform:translate3d(0,0,0)}100%{transform:translate3d(110%,0,0)}}
+@keyframes stPeel{0%{transform:perspective(1400px) rotateY(0);opacity:1}50%{transform:perspective(1400px) rotateY(0);opacity:1}100%{transform:perspective(1400px) rotateY(-88deg);opacity:0}}
+@keyframes stScan{0%{transform:translate3d(0,-100%,0)}46%{transform:translate3d(0,0,0)}100%{transform:translate3d(0,100%,0)}}
+@keyframes stFocus{0%{clip-path:circle(150% at 50% 50%)}48%{clip-path:circle(18% at 50% 50%)}100%{clip-path:circle(0% at 50% 50%)}}
+@keyframes stHorizon{0%{clip-path:inset(100% 0 0 0)}48%{clip-path:inset(0)}100%{clip-path:inset(0 0 100% 0)}}
+@keyframes stLoop{0%{clip-path:circle(0% at 50% 50%)}46%{clip-path:circle(150% at 50% 50%)}100%{clip-path:circle(0% at 50% 50%)}}
+html,body{width:100%;height:100%;overflow:hidden;}
+.content{min-width:0;}
+.visual{will-change:auto;}
+/* ---------- Phone-safe layout ---------- */
+@media (max-width:900px){
+  .slide{padding:7vh 7vw 10vh;align-items:flex-start;overflow:auto;overflow-x:hidden;}
+  .content{width:min(100%,760px);margin-top:6vh;z-index:5;}
+  h1{font-size:clamp(44px,9vw,72px);}
+  h2{font-size:clamp(31px,6.2vw,52px);margin-bottom:20px;}
+  .small-title{font-size:clamp(14px,2.8vw,20px);letter-spacing:4px;margin-bottom:18px;}
+  .speech-window{height:min(39vh,260px);margin-top:8px;}
+  .speech-line.text{font-size:clamp(19px,4.1vw,30px);line-height:1.48;}
+  .speech-line.key{font-size:clamp(25px,5.4vw,39px);line-height:1.3;}
+  .speech-line.quote{font-size:clamp(24px,5vw,38px);line-height:1.32;}
+  .visual{position:relative;right:auto;width:min(76vw,430px);height:min(48vw,270px);margin:5vh auto 0;border-radius:24px;}
+  .page{left:7vw;bottom:20px;font-size:13px;}
+  .author{right:7vw;bottom:20px;font-size:13px;}
+}
+@media (max-width:560px){
+  .slide{padding:6vh 6vw 9vh;}
+  .content{margin-top:2vh;}
+  h1{font-size:clamp(38px,11vw,56px);letter-spacing:-1px;}
+  h2{font-size:clamp(27px,8vw,42px);}
+  .speech-window{height:32vh;min-height:145px;max-height:230px;}
+  .speech-line.text{font-size:clamp(18px,5.1vw,25px);}
+  .speech-line.key{font-size:clamp(23px,6.5vw,32px);}
+  .speech-line.quote{font-size:clamp(22px,6vw,31px);}
+  .visual{width:82vw;height:43vw;margin-top:3vh;border-radius:20px;}
+  .ending-quote{font-size:clamp(21px,6vw,30px)!important;}
+  .ending-source{font-size:15px!important;}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .slide,.slide.edge-transition{transition:none!important;}
+  .edge-memory.incoming,.edge-memory.outgoing,.edge-rebuild.incoming,.edge-rebuild.outgoing,.edge-zoom.incoming,.edge-zoom.outgoing,.edge-card.incoming,.edge-card.outgoing,.edge-ripple.incoming,.edge-ripple.outgoing,.edge-impact.incoming,.edge-impact.outgoing,.edge-book.incoming,.edge-book.outgoing,.edge-split.incoming,.edge-split.outgoing,.edge-fusion.incoming,.edge-fusion.outgoing,.edge-page.incoming,.edge-page.outgoing,.edge-digital.incoming,.edge-digital.outgoing,.edge-focus.incoming,.edge-focus.outgoing,.edge-infinite.incoming,.edge-infinite.outgoing{animation:none!important;}
+}
+
+</style>
+
+</head>
+
+
+
+<body>
+
+
+
+<!-- =========================
+PAGE 1
+OPENING
+========================= -->
+
+
+<section class="slide bg-warm active">
+
+
+<div class="content">
+
+
+<div class="small-title">
+
+ENGLISH SPEECH
+
+</div>
+
+
+
+<h1>
+
+The Words
+
+<br>
+
+We Don't Have
+
+</h1>
+
+
+
+<br>
+
+
+
+<p class="quote">
+
+Can we understand something
+
+<br>
+
+we cannot name?
+
+</p>
+
+
+
+</div>
+
+
+
+<div class="visual">
+
+
+<img src="https://images.unsplash.com/photo-1499209974431-9dddcece7f88">
+
+
+</div>
+
+
+
+<div class="page">
+
+01 / 12
+
+</div>
+
+
+
+<div class="author">
+
+高一13班 陈恩贝
+
+</div>
+
+
+
+</section>
+
+
+
+
+
+
+<!-- =========================
+PAGE 2
+A FEELING WITHOUT NAME
+========================= -->
+
+
+<section class="slide bg-paper">
+
+
+<div class="content">
+
+
+<h2>
+
+Have you ever felt something...
+
+</h2>
+
+
+
+<p class="text">
+
+Something exists inside your mind,
+
+<br>
+
+but you cannot find the right words.
+
+</p>
+
+
+
+<br>
+
+
+
+<p class="key">
+
+A feeling without a name.
+
+</p>
+
+
+
+</div>
+
+
+
+<div class="visual">
+
+
+<img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee">
+
+
+</div>
+
+
+
+<div class="page">
+
+02 / 12
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+<!-- =========================
+PAGE 3
+CORE QUESTION
+========================= -->
+
+
+<section class="slide bg-blue">
+
+
+<div class="content">
+
+
+<h2>
+
+Are words only tools?
+
+</h2>
+
+
+
+
+<p class="text">
+
+Most people think:
+
+</p>
+
+
+<br>
+
+
+<p class="key">
+
+Ideas → Words
+
+</p>
+
+
+<br>
+
+
+<p class="text">
+
+But maybe...
+
+</p>
+
+
+
+<p class="key">
+
+Words → Ideas
+
+</p>
+
+
+
+</div>
+
+
+
+
+<div class="visual">
+
+
+<img src="https://images.unsplash.com/photo-1559757175-0eb30cd8c063">
+
+
+</div>
+
+
+
+<div class="page">
+
+03 / 12
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+<!-- =========================
+PAGE 4
+WORDS CREATE REALITY
+========================= -->
+
+
+<section class="slide bg-warm">
+
+
+<div class="content">
+
+
+<h2>
+
+Words are not just names.
+
+</h2>
+
+
+
+<p class="key">
+
+A word can change
+
+<br>
+
+what we see.
+
+</p>
+
+
+
+<br>
+
+
+
+<p class="text">
+
+Without a word,
+
+<br>
+
+sometimes we cannot clearly
+
+<br>
+
+understand something.
+
+</p>
+
+
+
+</div>
+
+
+
+
+<div class="visual">
+
+
+<img src="https://images.unsplash.com/photo-1448375240586-882707db888b">
+
+
+</div>
+
+
+
+
+<div class="page">
+
+04 / 12
+
+</div>
+
+
+</section>
+
+<!-- =========================
+PAGE 5
+A WORD CREATES UNDERSTANDING
+========================= -->
+
+
+<section class="slide bg-paper">
+
+
+<div class="content">
+
+
+<h2>
+
+When a word appears,
+
+<br>
+
+a new idea appears.
+
+</h2>
+
+
+
+<p class="text">
+
+Before:
+
+</p>
+
+
+
+<p class="key">
+
+"I feel bad."
+
+</p>
+
+
+
+<br>
+
+
+
+<p class="text">
+
+After:
+
+</p>
+
+
+
+<p class="key">
+
+"I feel stressed."
+
+</p>
+
+
+
+
+</div>
+
+
+
+
+<div class="visual">
+
+
+<img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644">
+
+
+</div>
+
+
+
+
+<div class="page">
+
+05 / 12
+
+</div>
+
+
+
+</section>
+
+
+
+
+
+
+
+<!-- =========================
+PAGE 6
+FEELINGS NEED NAMES
+========================= -->
+
+
+<section class="slide bg-blue">
+
+
+<div class="content">
+
+
+<h2>
+
+Some feelings need names.
+
+</h2>
+
+
+
+<p class="text">
+
+Some problems existed
+
+<br>
+
+before we understood them.
+
+</p>
+
+
+
+
+<br>
+
+
+
+<p class="key">
+
+Mental Health
+
+</p>
+
+
+
+<p class="key">
+
+Burnout
+
+</p>
+
+
+
+<p class="key">
+
+Loneliness
+
+</p>
+
+
+
+</div>
+
+
+
+
+<div class="visual">
+
+
+<img src="https://images.unsplash.com/photo-1493836512294-502baa1986e2">
+
+
+</div>
+
+
+
+<div class="page">
+
+06 / 12
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+
+<!-- =========================
+TRANSITION
+========================= -->
+
+
+<section class="slide bg-warm">
+
+
+<div class="content">
+
+
+<h1>
+
+A word
+
+<br>
+
+can change
+
+<br>
+
+the world.
+
+</h1>
+
+
+
+</div>
+
+
+
+<div class="page">
+
+06.5 / 12
+
+</div>
+
+
+
+</section>
+
+
+
+
+
+
+
+<!-- =========================
+PAGE 7
+SOCIAL CHANGE
+========================= -->
+
+
+<section class="slide bg-paper">
+
+
+<div class="content">
+
+
+<h2>
+
+A word can change society.
+
+</h2>
+
+
+
+
+<p class="text">
+
+Some problems existed
+
+<br>
+
+for a long time.
+
+</p>
+
+
+
+<br>
+
+
+
+<p class="key">
+
+Cyberbullying
+
+</p>
+
+
+
+
+<br>
+
+
+
+
+<p class="text">
+
+When we name a problem,
+
+<br>
+
+we start to solve it.
+
+</p>
+
+
+
+
+</div>
+
+
+
+
+<div class="visual">
+
+
+<img src="https://images.unsplash.com/photo-1611162617474-5b21e879e113">
+
+
+</div>
+
+
+
+
+<div class="page">
+
+07 / 12
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+
+<!-- =========================
+PAGE 8
+TRANSLATION LIMIT
+========================= -->
+
+
+<section class="slide bg-blue">
+
+
+<div class="content">
+
+
+<h2>
+
+Some ideas cannot be
+
+<br>
+
+translated perfectly.
+
+</h2>
+
+
+
+
+<p class="text">
+
+For example:
+
+</p>
+
+
+
+<br>
+
+
+
+<p class="key">
+
+内卷
+
+</p>
+
+
+
+
+<br>
+
+
+
+<p class="text">
+
+Competition.
+
+<br>
+
+Pressure.
+
+<br>
+
+Overwork.
+
+</p>
+
+
+
+
+<br>
+
+
+
+<p class="text">
+
+But none of them shows
+
+<br>
+
+the whole meaning.
+
+</p>
+
+
+
+</div>
+
+
+
+
+<div class="visual">
+
+
+<img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d">
+
+
+</div>
+
+
+
+<div class="page">
+
+08 / 12
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+
+<!-- =========================
+PAGE 9
+LANGUAGE AND CULTURE
+========================= -->
+
+
+<section class="slide bg-warm">
+
+
+<div class="content">
+
+
+<h2>
+
+Language carries culture.
+
+</h2>
+
+
+
+
+<p class="key">
+
+House ≠ Home
+
+</p>
+
+
+
+<br>
+
+
+
+<p class="text">
+
+A house is a place.
+
+<br>
+
+A home is a feeling.
+
+</p>
+
+
+
+
+</div>
+
+
+
+
+<div class="visual">
+
+
+<img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6">
+
+
+</div>
+
+
+
+
+<div class="page">
+
+09 / 12
+
+</div>
+
+
+
+</section>
+
+<!-- =========================
+PAGE 10
+LANGUAGE DISAPPEARS
+========================= -->
+
+
+<section class="slide bg-paper">
+
+
+<div class="content">
+
+
+<h2>
+
+When a language disappears...
+
+</h2>
+
+
+
+<p class="key">
+
+We lose more than words.
+
+</p>
+
+
+
+<br>
+
+
+
+<p class="text">
+
+We lose a unique way
+
+<br>
+
+of seeing the world.
+
+</p>
+
+
+
+</div>
+
+
+
+
+<div class="visual">
+
+
+<img src="https://images.unsplash.com/photo-1457369804613-52c61a468e7d">
+
+
+</div>
+
+
+
+<div class="page">
+
+10 / 12
+
+</div>
+
+
+
+</section>
+
+
+
+
+
+
+
+<!-- =========================
+PAGE 11
+AI ERA
+========================= -->
+
+
+<section class="slide bg-blue">
+
+
+<div class="content">
+
+
+<h2>
+
+AI can translate
+
+<br>
+
+more than ever before.
+
+</h2>
+
+
+
+
+<p class="text">
+
+Chinese
+
+&nbsp;&nbsp;
+
+English
+
+&nbsp;&nbsp;
+
+日本語
+
+</p>
+
+
+
+<br>
+
+
+
+<p class="key">
+
+AI
+
+</p>
+
+
+
+<br>
+
+
+
+<p class="quote">
+
+Do we still need
+
+<br>
+
+to learn languages?
+
+</p>
+
+
+
+
+</div>
+
+
+
+
+<div class="visual">
+
+
+<img src="https://images.unsplash.com/photo-1677442136019-21780ecad995">
+
+
+</div>
+
+
+
+
+<div class="page">
+
+11 / 12
+
+</div>
+
+
+
+</section>
+
+
+
+
+
+
+
+<!-- =========================
+PAGE 12
+FINAL QUESTION
+========================= -->
+
+
+<section class="slide bg-warm">
+
+
+<div class="content">
+
+
+<h2>
+
+Translation is not
+
+<br>
+
+understanding.
+
+</h2>
+
+
+
+
+<p class="text">
+
+Words
+
+<br>
+
+↓
+
+<br>
+
+Meaning
+
+<br>
+
+↓
+
+<br>
+
+Experience
+
+</p>
+
+
+
+<br>
+
+
+
+<p class="key">
+
+Can AI fully understand humans?
+
+</p>
+
+
+
+</div>
+
+
+
+
+<div class="visual">
+
+
+<img src="https://images.unsplash.com/photo-1531746790731-6c087fecd65a">
+
+
+</div>
+
+
+
+<div class="page">
+
+12 / 12
+
+</div>
+
+
+
+</section>
+
+
+
+
+
+
+
+<!-- =========================
+ENDING PAGE
+========================= -->
+
+
+<section class="slide bg-blue">
+
+
+<div class="content">
+
+
+<h1>
+
+The future
+
+<br>
+
+needs
+
+<br>
+
+new words.
+
+</h1>
+
+
+
+
+<br>
+
+
+
+<p class="quote">
+
+What new words
+
+<br>
+
+will we create?
+
+</p>
+
+
+
+<br>
+
+
+
+<p class="quote ending-quote">
+
+“The limits of my language mean the limits of my world.”
+
+</p>
+
+<p class="text ending-source">
+
+— Ludwig Wittgenstein
+
+</p>
+
+<p class="text">
+
+Thank you.
+
+</p>
+
+
+
+</div>
+
+
+
+<div class="author">
+
+高一13班 陈恩贝
+
+</div>
+
+
+
+</section>
+
+
+
+
+
+
+
+<script>
+/* =================================
+   Seewo Board Control
+   → 下一页
+   ← 上一页
+   空格 暂停/继续自动播放
+
+   演讲正文：
+   - 自动按句拆分
+   - 根据英文单词数估算每句播放时间
+   - 默认演讲速度 130 WPM
+   - 句末标点自动增加停顿
+   - 页面停留时间由正文实际长度决定
+================================= */
+
+const slides = Array.from(document.querySelectorAll(".slide"));
+let current = 0;
+let autoPlay = true;
+let autoTimer = null;
+let speechTimer = null;
+let speechStartTimer = null;
+let transitionTimer = null;
+let transitionTimer2 = null;
+let isTransitioning = false;
+
+const SPEAKING_WPM = 130;
+const SEC_PER_WORD = 60 / SPEAKING_WPM;
+const MIN_SENTENCE_TIME = 1.35;
+const PUNCT_PAUSE = {".":.55,"!":.65,"?":.75,",":.15,";":.25,":":.25,"。":.55,"！":.65,"？":.75};
+
+function splitSentences(text){
+  text = text.replace(/\s+/g," ").trim();
+  if(!text) return [];
+  return (text.match(/[^.!?。！？]+[.!?。！？]?/g)||[text]).map(s=>s.trim()).filter(Boolean);
+}
+function countWords(text){
+  const english = (text.match(/[A-Za-z]+(?:['’-][A-Za-z]+)*/g)||[]).length;
+  const chinese = (text.match(/[\u4e00-\u9fff]/g)||[]).length;
+  if(english) return english;
+  if(chinese) return Math.max(1,chinese/3);
+  return 1;
+}
+function sentenceDuration(text){
+  const words=countWords(text), last=text.slice(-1), pause=PUNCT_PAUSE[last]||.2;
+  return Math.max(MIN_SENTENCE_TIME,words*SEC_PER_WORD+pause);
+}
+
+const slideSpeech=[];
+slides.forEach((slide,slideIndex)=>{
+  const content=slide.querySelector(".content");
+  if(!content){slideSpeech[slideIndex]={lines:[],durations:[],total:8000};return;}
+  // Avoid :scope for maximum mobile-browser compatibility.
+  const originals=Array.from(content.children).filter(el=>el.tagName.toLowerCase()==="p");
+  if(!originals.length){slideSpeech[slideIndex]={lines:[],durations:[],total:7000};return;}
+
+  const win=document.createElement("div"); win.className="speech-window";
+  const track=document.createElement("div"); track.className="speech-track";
+  const cursor=document.createElement("div"); cursor.className="speech-cursor";
+  const lines=[],durations=[];
+
+  originals.forEach(original=>{
+    const text=original.textContent.replace(/\s+/g," ").trim();
+    splitSentences(text).forEach(sentence=>{
+      const line=document.createElement("div");
+      line.className="speech-line "+(original.className||"");
+      line.textContent=sentence;
+      track.appendChild(line); lines.push(line); durations.push(sentenceDuration(sentence));
+    });
+    original.remove();
+  });
+  win.appendChild(track); win.appendChild(cursor);
+  const heading=Array.from(content.children).find(el=>el.tagName.toLowerCase()==="h1"||el.tagName.toLowerCase()==="h2");
+  if(heading) heading.insertAdjacentElement("afterend",win); else content.prepend(win);
+  slideSpeech[slideIndex]={windowEl:win,track,lines,durations,total:durations.reduce((a,b)=>a+b,0)*1000+1800,index:0};
+});
+
+function clearAllTimers(){
+  clearTimeout(speechTimer); clearTimeout(speechStartTimer); clearTimeout(autoTimer); clearTimeout(transitionTimer); clearTimeout(transitionTimer2);
+}
+function resetSpeech(pageIndex){
+  const data=slideSpeech[pageIndex]; if(!data||!data.lines.length)return;
+  data.index=0;
+  data.lines.forEach(l=>{l.classList.remove("active-line","past-line");l.classList.add("future-line");});
+  requestAnimationFrame(()=>updateSpeechPosition(data,0));
+}
+function updateSpeechPosition(data,index){
+  if(!data.lines.length)return;
+  data.lines.forEach((line,i)=>{
+    line.classList.remove("active-line","past-line","future-line");
+    line.classList.add(i===index?"active-line":i<index?"past-line":"future-line");
+  });
+  const line=data.lines[index];
+  const trackRect=data.track.getBoundingClientRect();
+  const lineRect=line.getBoundingClientRect();
+  const offset=(trackRect.top+data.windowEl.clientHeight/2)-(lineRect.top+lineRect.height/2);
+  data.track.style.transform=`translate3d(0,calc(-50% + ${offset}px),0)`;
+}
+function playSentence(pageIndex,index){
+  const data=slideSpeech[pageIndex];
+  if(!data||!data.lines.length||current!==pageIndex||!autoPlay)return;
+  data.index=index; updateSpeechPosition(data,index); clearTimeout(speechTimer);
+  if(index+1<data.lines.length){speechTimer=setTimeout(()=>playSentence(pageIndex,index+1),(data.durations[index]||MIN_SENTENCE_TIME)*1000);}
+}
+function startPageSpeech(pageIndex){
+  clearTimeout(speechStartTimer); clearTimeout(speechTimer);
+  const data=slideSpeech[pageIndex]; if(!data||!data.lines.length)return;
+  resetSpeech(pageIndex);
+  speechStartTimer=setTimeout(()=>{if(current===pageIndex&&autoPlay)playSentence(pageIndex,0);},350);
+}
+function pageDuration(pageIndex){const data=slideSpeech[pageIndex];return data&&data.lines.length?data.total:7000;}
+
+/* Stable edge transition: the cover is the ONLY animated page-turn surface. */
+const edgeNames=["memory","rebuild","zoom","card","ripple","impact","book","split","fusion","page","digital","focus","infinite"];
+function normalize(n){return (n+slides.length)%slides.length;}
+const transitionLayer=document.createElement("div");
+transitionLayer.className="scene-transition";
+transitionLayer.setAttribute("aria-hidden","true");
+transitionLayer.innerHTML='<div class="cover"></div>';
+document.body.appendChild(transitionLayer);
+const transitionCover=transitionLayer.querySelector(".cover");
+
+function getEdgeIndex(oldIndex,nextIndex){
+    if(nextIndex===oldIndex)return oldIndex;
+    return nextIndex>oldIndex?oldIndex:nextIndex;
+}
+
+function showPage(number){
+    if(isTransitioning)return;
+    const next=normalize(number);
+    if(next===current)return;
+    clearAllTimers();
+
+    const old=current;
+    const edgeIndex=getEdgeIndex(old,next);
+    const name=(edgeIndex===slides.length-1 && next===0)
+        ?"loop"
+        :edgeNames[Math.min(edgeIndex,edgeNames.length-1)];
+    const reverse=next<old;
+    const outgoing=slides[old], incoming=slides[next];
+
+    isTransitioning=true;
+
+    /* The old page stays untouched. Start the cover over it. */
+    transitionLayer.className="scene-transition t-"+name+(reverse?" reverse":"");
+    transitionCover.style.animation="none";
+    transitionLayer.classList.add("is-running");
+    void transitionCover.offsetWidth;
+    transitionCover.style.animation="";
+
+    /* At the opaque midpoint, switch the DOM instantly underneath the cover. */
+    transitionTimer=setTimeout(()=>{
+        outgoing.classList.remove("active");
+        incoming.classList.add("active");
+        current=next;
+        resetSpeech(current);
+    },440);
+
+    /* The same cover completes its exit; there is no second page animation. */
+    transitionTimer2=setTimeout(()=>{
+        transitionLayer.className="scene-transition";
+        transitionCover.style.animation="none";
+        isTransitioning=false;
+        if(autoPlay){
+            startPageSpeech(current);
+            scheduleNextPage();
+        }
+    },900);
+}
+
+function scheduleNextPage(){
+  clearTimeout(autoTimer); if(!autoPlay||isTransitioning)return;
+  autoTimer=setTimeout(()=>showPage(current+1),pageDuration(current));
+}
+
+document.addEventListener("keydown",event=>{
+  if(event.key==="ArrowRight"){autoPlay=false;clearAllTimers();showPage(current+1);}
+  else if(event.key==="ArrowLeft"){autoPlay=false;clearAllTimers();showPage(current-1);}
+  else if(event.code==="Space"){
+    autoPlay=!autoPlay;
+    if(autoPlay){startPageSpeech(current);scheduleNextPage();}else clearAllTimers();
+  }
+});
+/* Touch/click: avoid accidental page turns while scrolling vertically on phones. */
+let touchStartX=null,touchStartY=null;
+document.addEventListener("touchstart",e=>{const t=e.changedTouches[0];touchStartX=t.clientX;touchStartY=t.clientY;},{passive:true});
+document.addEventListener("touchend",e=>{
+  const t=e.changedTouches[0]; if(touchStartX===null)return;
+  const dx=t.clientX-touchStartX,dy=t.clientY-touchStartY; touchStartX=touchStartY=null;
+  if(Math.abs(dx)>55&&Math.abs(dx)>Math.abs(dy)){autoPlay=false;clearAllTimers();showPage(current+(dx<0?1:-1));}
+});
+document.addEventListener("click",event=>{
+  if(window.innerWidth<=900)return; // on phones use swipe; this prevents scroll/click conflicts
+  if(event.target.closest("a,button,input,textarea,select"))return;
+  autoPlay=false;clearAllTimers();showPage(current+(event.clientX>window.innerWidth/2?1:-1));
+});
+
+slides.forEach(s=>s.classList.remove("active","leave"));
+slides[0].classList.add("active");
+resetSpeech(0);startPageSpeech(0);scheduleNextPage();
+</script>
+
+
+
+</body>
+
+</html>
